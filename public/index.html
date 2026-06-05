@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My C++ Local LLM</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #343541; color: #ececf1; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        #header { background-color: #202123; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid #4d4d4f; }
+        #chat-box { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .message { padding: 15px 20px; border-radius: 8px; max-width: 80%; line-height: 1.6; font-size: 1rem; }
+        .user { background-color: #444654; align-self: flex-end; border-bottom-right-radius: 0; }
+        .ai { background-color: #40414f; align-self: flex-start; border-bottom-left-radius: 0; border: 1px solid #565869; }
+        #input-container { padding: 20px; background-color: #343541; display: flex; gap: 10px; border-top: 1px solid #4d4d4f; justify-content: center; }
+        #msg-input { width: 60%; padding: 15px; border-radius: 8px; border: 1px solid #565869; background-color: #40414f; color: white; font-size: 1rem; outline: none; }
+        #msg-input:focus { border-color: #10a37f; }
+        button { padding: 15px 25px; border: none; border-radius: 8px; background-color: #10a37f; color: white; cursor: pointer; font-size: 1rem; font-weight: bold; transition: background-color 0.2s; }
+        button:hover { background-color: #0b8c6c; }
+    </style>
+</head>
+<body>
+    <div id="header">My C++ Local LLM Server</div>
+    <div id="chat-box">
+        <div class="message ai"> <b>AI:</b> 안녕하세요! 저는 당신의 노트북에서 돌아가고 있는 로컬 AI입니다. 무엇을 도와드릴까요?</div>
+    </div>
+    <div id="input-container">
+        <input type="text" id="msg-input" placeholder="메시지를 입력하세요..." onkeypress="if(event.key === 'Enter') sendMessage()">
+        <button onclick="sendMessage()">전송</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('msg-input');
+            const chatBox = document.getElementById('chat-box');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            // 1. 내가 보낸 질문을 화면에 표시
+            chatBox.innerHTML += `<div class="message user"> <b>나:</b> ${msg}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 2. AI가 생각하는 동안 보여줄 로딩 메시지
+            const loadingId = 'loading-' + Date.now();
+            chatBox.innerHTML += `<div id="${loadingId}" class="message ai"> <b>AI:</b> 답변을 생성하고 있습니다... ⏳</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // 3. 우리의 C++ 서버(/chat)로 질문 전송!
+                const response = await fetch(`/chat?msg=${encodeURIComponent(msg)}`);
+                const answer = await response.text();
+                
+                // 4. 로딩 메시지를 지우고 진짜 답변으로 교체
+                document.getElementById(loadingId).outerHTML = `<div class="message ai"> <b>AI:</b> ${answer}</div>`;
+            } catch(e) {
+                document.getElementById(loadingId).outerHTML = `<div class="message ai" style="color: #ff6b6b;"> 에러: 서버와 연결할 수 없습니다.</div>`;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
