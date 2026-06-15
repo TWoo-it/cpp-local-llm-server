@@ -65,6 +65,16 @@ Visual Studio Build Tools (C++ 컴파일러)
 
 Vulkan SDK (GPU 가속용)
 
+## 사전 준비: AI 모델 다운로드 (필수)
+깃허브 용량 제한으로 인해 대형 언어 모델 파일(`.gguf`)은 포함되어 있지 않습니다.
+서버를 빌드하기 전에 반드시 아래 지침에 따라 모델을 다운로드해주세요.
+
+1. [Hugging Face - Llama 3 8B GGUF](https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF) 페이지에 접속합니다.
+2. `Meta-Llama-3-8B-Instruct.Q4_K_M.gguf` 파일을 다운로드합니다.
+3. 다운로드한 파일을 프로젝트 루트의 `models/` 폴더 안에 넣어주세요. (폴더가 없다면 생성)
+
+**최종 파일 경로 확인:** `cpp-local-llm-server/models/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf`
+
 ## 빌드 및 실행 명령어
 # 1. 저장소 클론 및 서브모듈(llama.cpp) 초기화
 git clone [https://github.com/TWoo-it/cpp-local-llm-server.git](https://github.com/TWoo-it/cpp-local-llm-server.git)
