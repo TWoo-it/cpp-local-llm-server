@@ -10,7 +10,8 @@
 
 외부 API(OpenAI 등)에 의존하지 않고, 내 PC(로컬) 메모리에 대형 언어 모델(LLM)을 직접 적재하여 구동하는 **독립형 AI 웹 서버**입니다. C++과 `llama.cpp` 엔진을 기반으로 모델 추론 파이프라인을 바닥부터 구축하였으며, 하드웨어 가속(Vulkan)을 통해 내장 GPU의 성능을 100% 끌어냈습니다.
 
-> ** 실행 화면 (Web UI & Terminal)** > ![실행 화면 스크린샷]() 
+<img width="959" height="466" alt="10" src="https://github.com/user-attachments/assets/a362aba3-da1f-4acd-8859-4b5e20f34fad" />
+
 
 ##  기술 스택 (Tech Stack)
 * **Backend Engine:** C++17, CMake
